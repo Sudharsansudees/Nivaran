@@ -1,10 +1,10 @@
 // Small inline icon set — no external icon library, keeps the bundle
 // lean and every icon themeable via currentColor.
-const base = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }
+const base = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true, focusable: 'false' }
 
 export function BrandIcon(props) {
   return (
-    <svg {...base} {...props}>
+    <svg {...base} aria-hidden="true" focusable="false" {...props}>
       <path d="M12 3l8 3.5v4c0 4.7-3.2 8.9-8 10-4.8-1.1-8-5.3-8-10v-4L12 3z" />
       <path d="M9 12.2l2 2 4-4.2" />
     </svg>

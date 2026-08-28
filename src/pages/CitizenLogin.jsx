@@ -48,7 +48,7 @@ export default function CitizenLogin() {
       <div className="sheet">
         <h2 className="sheet-title">Citizen Sign In</h2>
 
-        {error && <div className="banner banner-error">{error}</div>}
+        {error && <div id="login-error" className="banner banner-error" role="alert">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="field">
@@ -60,12 +60,15 @@ export default function CitizenLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
+              autoComplete="email"
+              inputMode="email"
+              aria-describedby={error ? 'login-error' : undefined}
               autoFocus
             />
           </div>
           <div className="btn-row">
             <button className="btn" type="submit" disabled={busy}>
-              {busy ? <span className="spinner" /> : 'Continue'}
+              {busy ? <><span className="spinner" aria-hidden="true" /> Signing in…</> : 'Continue'}
             </button>
           </div>
         </form>

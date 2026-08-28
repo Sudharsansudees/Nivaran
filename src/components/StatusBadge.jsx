@@ -8,7 +8,7 @@ const LABELS = {
 }
 
 export default function StatusBadge({ status }) {
-  return <span className={`status-badge status-${status}`}>{LABELS[status] ?? status}</span>
+  return <span className={`status-badge status-${status}`} aria-label={`Status: ${LABELS[status] ?? status}`}>{LABELS[status] ?? status}</span>
 }
 
 export { LABELS as STATUS_LABELS }
