@@ -14,17 +14,17 @@ export default function CitizenDashboard() {
   return (
     <div>
       <div className="grievance-card-top" style={{ marginBottom: '1.25rem' }}>
-        <h1 style={{ margin: 0 }}>Your Grievances</h1>
+        <h1 className="page-heading" style={{ margin: 0 }}>Your Grievances</h1>
         <Link to="/file" className="btn">
           File a new grievance
         </Link>
       </div>
 
-      {error && <div className="banner banner-error">{error}</div>}
+      {error && <div className="banner banner-error" role="alert">{error}</div>}
 
       {grievances === null && !error && (
-        <div className="empty-state">
-          <span className="spinner" /> Loading…
+        <div className="loading-state" role="status">
+          <span className="spinner" aria-hidden="true" /> Loading your grievances…
         </div>
       )}
 
@@ -38,7 +38,7 @@ export default function CitizenDashboard() {
 
       <div className="card-list">
         {grievances?.map((g) => (
-          <Link to={`/grievances/${g.id}`} className="grievance-card" key={g.id}>
+          <Link to={`/grievances/${g.id}`} className="grievance-card" key={g.id} aria-label={`Grievance ${g.id.slice(0, 8)}, ${g.department}, status ${g.status.replaceAll('_', ' ')}`}>
             <div className="grievance-card-top">
               <span className="grievance-card-id">
                 #{g.id.slice(0, 8)} · {g.department}

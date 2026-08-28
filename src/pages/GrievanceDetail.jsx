@@ -82,11 +82,11 @@ export default function GrievanceDetail() {
     }
   }
 
-  if (error && !grievance) return <div className="banner banner-error">{error}</div>
+  if (error && !grievance) return <div className="banner banner-error" role="alert">{error}</div>
   if (!grievance) {
     return (
-      <div className="empty-state">
-        <span className="spinner" /> Loading…
+      <div className="loading-state" role="status">
+        <span className="spinner" aria-hidden="true" /> Loading grievance details…
       </div>
     )
   }
@@ -118,7 +118,7 @@ export default function GrievanceDetail() {
         )}
       </div>
 
-      {error && <div className="banner banner-error">{error}</div>}
+      {error && <div className="banner banner-error" role="alert">{error}</div>}
 
       {canRespond && (
         <div className="sheet">
@@ -141,7 +141,7 @@ export default function GrievanceDetail() {
           <p>{summary}</p>
         ) : (
           <button className="btn btn-outline btn-small" onClick={handleSummarize} disabled={summarizing}>
-            {summarizing ? <span className="spinner" /> : 'Summarize with AI'}
+            {summarizing ? <><span className="spinner" aria-hidden="true" /> Summarizing…</> : 'Summarize with AI'}
           </button>
         )}
       </div>
@@ -153,7 +153,7 @@ export default function GrievanceDetail() {
             <p style={{ whiteSpace: 'pre-wrap' }}>{escalationDraft}</p>
           ) : (
             <button className="btn btn-outline btn-small" onClick={handleDraftEscalation} disabled={drafting}>
-              {drafting ? <span className="spinner" /> : 'Draft escalation message (AI)'}
+              {drafting ? <><span className="spinner" aria-hidden="true" /> Drafting…</> : 'Draft escalation message (AI)'}
             </button>
           )}
         </div>

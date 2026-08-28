@@ -71,7 +71,7 @@ export default function FileGrievance() {
     <div className="sheet" style={{ maxWidth: 640, margin: '0 auto' }}>
       <h2 className="sheet-title">File a Grievance</h2>
 
-      {error && <div className="banner banner-error">{error}</div>}
+      {error && <div id="form-error" className="banner banner-error" role="alert">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="field">
@@ -85,6 +85,7 @@ export default function FileGrievance() {
               setClassification(null)
             }}
             placeholder="e.g. Streetlight outside 12 MG Road has been out for two weeks…"
+            aria-describedby="description-hint"
             autoFocus
           />
         </div>
@@ -95,11 +96,13 @@ export default function FileGrievance() {
           onClick={handleClassify}
           disabled={classifying || !description.trim()}
         >
-          {classifying ? <span className="spinner" /> : 'Suggest department (AI)'}
+          {classifying ? <><span className="spinner" aria-hidden="true" /> Finding department…</> : 'Suggest department (AI)'}
         </button>
 
+        <p id="description-hint" className="field-hint">Include the location, how long the issue has persisted, and any safety impact. Do not include Aadhaar or other sensitive ID numbers.</p>
+
         {classification && (
-          <div className="classification-box">
+          <div className="classification-box" role="status" aria-live="polite">
             Suggested: <strong>{classification.department}</strong>{' '}
             {classification.confidence != null && (
               <span className="conf">({Math.round(classification.confidence * 100)}% confidence)</span>
@@ -116,6 +119,7 @@ export default function FileGrievance() {
             required
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
+            aria-describedby="department-hint"
           >
             <option value="" disabled>
               Select a department…
@@ -126,12 +130,12 @@ export default function FileGrievance() {
               </option>
             ))}
           </select>
-          <div className="field-hint">You can override the AI suggestion before submitting.</div>
+          <div id="department-hint" className="field-hint">You can override the AI suggestion before submitting.</div>
         </div>
 
         <div className="btn-row">
           <button className="btn" type="submit" disabled={submitting}>
-            {submitting ? <span className="spinner" /> : 'Submit grievance'}
+            {submitting ? <><span className="spinner" aria-hidden="true" /> Submitting…</> : 'Submit grievance'}
           </button>
         </div>
       </form>

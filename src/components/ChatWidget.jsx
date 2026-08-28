@@ -21,6 +21,21 @@ export default function ChatWidget() {
 
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
+  const inputRef = useRef(null)
+  const launcherRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    inputRef.current?.focus()
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        launcherRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
@@ -91,27 +106,29 @@ export default function ChatWidget() {
   return (
     <div className="chat-widget">
       {open && (
-        <div className="chat-panel">
+        <div className="chat-panel" role="dialog" aria-modal="true" aria-labelledby="assistant-title">
           <div className="chat-header">
-            <span>Nivaran Assistant</span>
+            <span id="assistant-title">Nivaran Assistant</span>
             <div className="chat-header-actions">
               {speechSynthesisAvailable && (
                 <button
                   type="button"
                   className={`chat-icon-btn ${voiceReplies ? 'active' : ''}`}
                   title={voiceReplies ? 'Voice replies on' : 'Voice replies off'}
+                  aria-label={voiceReplies ? 'Turn voice replies off' : 'Turn voice replies on'}
+                  aria-pressed={voiceReplies}
                   onClick={() => setVoiceReplies((v) => !v)}
                 >
                   {voiceReplies ? '🔊' : '🔈'}
                 </button>
               )}
-              <button type="button" className="chat-icon-btn" title="Close" onClick={() => setOpen(false)}>
+              <button type="button" className="chat-icon-btn" aria-label="Close assistant" onClick={() => { setOpen(false); launcherRef.current?.focus() }}>
                 ✕
               </button>
             </div>
           </div>
 
-          <div className="chat-messages" ref={scrollRef}>
+          <div className="chat-messages" ref={scrollRef} role="log" aria-live="polite" aria-relevant="additions text">
             {messages.map((m, i) => (
               <div key={i} className={`chat-bubble chat-bubble-${m.from}`}>
                 <span style={{ whiteSpace: 'pre-wrap' }}>{m.text}</span>
@@ -132,7 +149,7 @@ export default function ChatWidget() {
             ))}
             {sending && (
               <div className="chat-bubble chat-bubble-bot">
-                <span className="spinner" />
+                <span className="spinner" aria-hidden="true" /><span className="sr-only">Assistant is responding</span>
               </div>
             )}
           </div>
@@ -144,16 +161,20 @@ export default function ChatWidget() {
                 className={`chat-mic-btn ${listening ? 'listening' : ''}`}
                 onClick={toggleListening}
                 title={listening ? 'Stop listening' : 'Speak instead of typing'}
+                aria-label={listening ? 'Stop listening' : 'Speak instead of typing'}
+                aria-pressed={listening}
               >
                 🎤
               </button>
             )}
             <input
+              ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={listening ? 'Listening…' : 'Describe the issue, or ask about a grievance…'}
               disabled={sending}
+              aria-label="Message to Nivaran Assistant"
             />
             <button type="submit" className="btn btn-small" disabled={sending || !input.trim()}>
               Send
@@ -165,6 +186,7 @@ export default function ChatWidget() {
       <button
         type="button"
         className="chat-fab"
+        ref={launcherRef}
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? 'Close assistant' : 'Open assistant'}
       >

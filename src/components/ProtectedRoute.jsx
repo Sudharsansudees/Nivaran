@@ -6,8 +6,8 @@ export default function ProtectedRoute({ role, children }) {
 
   if (loading || session === undefined) {
     return (
-      <div className="empty-state">
-        <span className="spinner" /> Loading…
+      <div className="loading-state" role="status">
+        <span className="spinner" aria-hidden="true" /> Checking your session…
       </div>
     )
   }

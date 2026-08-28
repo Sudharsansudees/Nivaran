@@ -1,23 +1,29 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 
-import Landing from './pages/Landing'
-import CitizenLogin from './pages/CitizenLogin'
-import OfficerLogin from './pages/OfficerLogin'
-import OfficerSignup from './pages/OfficerSignup'
-import CitizenDashboard from './pages/CitizenDashboard'
-import FileGrievance from './pages/FileGrievance'
-import GrievanceDetail from './pages/GrievanceDetail'
-import OfficerDashboard from './pages/OfficerDashboard'
-import OfficerGrievanceDetail from './pages/OfficerGrievanceDetail'
-import NotFound from './pages/NotFound'
+const Landing = lazy(() => import('./pages/Landing'))
+const CitizenLogin = lazy(() => import('./pages/CitizenLogin'))
+const OfficerLogin = lazy(() => import('./pages/OfficerLogin'))
+const OfficerSignup = lazy(() => import('./pages/OfficerSignup'))
+const CitizenDashboard = lazy(() => import('./pages/CitizenDashboard'))
+const FileGrievance = lazy(() => import('./pages/FileGrievance'))
+const GrievanceDetail = lazy(() => import('./pages/GrievanceDetail'))
+const OfficerDashboard = lazy(() => import('./pages/OfficerDashboard'))
+const OfficerGrievanceDetail = lazy(() => import('./pages/OfficerGrievanceDetail'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+
+function PageLoading() {
+  return <div className="loading-state" role="status"><span className="spinner" aria-hidden="true" /> <span>Loading page…</span></div>
+}
 
 export default function App() {
   return (
     <AuthProvider>
       <Layout>
+        <Suspense fallback={<PageLoading />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<CitizenLogin />} />
@@ -68,6 +74,7 @@ export default function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </Layout>
     </AuthProvider>
   )
